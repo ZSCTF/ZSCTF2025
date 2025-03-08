@@ -1,0 +1,48 @@
+MsgBox "VBScript, often abbreviated as VBS, is an event-driven programming language developed by Microsoft, primarily used for scripting in the Windows environment."
+MsgBox "It is based on the Visual Basic programming language and is designed to be simple and easy to use, especially for those familiar with the BASIC programming language."
+MsgBox "CTFers! Have fun with this VBS challenge!"
+flag = InputBox("Enter the FLAG:", "So EZ:D")
+bbb = "KzBRJSN7JyWnLnTnL1BjL2JOq1ztBU5yD2X0r18lrT9dI19vALAkL1JnA0N1AJ9OHaFtAK5INHBzI3ElpaqvtE=="
+
+aaa = 9+2+2+1
+
+Function Base64Decode(base64EncodedString)
+    Dim xml, elem
+    Set xml = CreateObject("MSXML2.DOMDocument")
+    Set elem = xml.createElement("tmp")
+    elem.dataType = "bin.base64"
+    elem.text = base64EncodedString
+    Dim stream
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 1 'Binary
+    stream.Open
+    stream.Write elem.nodeTypedValue
+    stream.Position = 0
+    stream.Type = 2 'Text
+    stream.Charset = "utf-8"
+    Base64Decode = stream.ReadText
+    stream.Close
+End Function
+Function Caesar(str,offset)
+        Dim length,char,i
+        Caesar = ""
+        length = Len(str)
+        For i = 1 To length
+                char = Mid(str,i,1)
+                If char >= "A" And char <= "Z" Then
+                        char = Asc("A") + (Asc(char) - Asc("A") + offset) Mod 26
+                        Caesar = Caesar & Chr(char)
+                ElseIf char >= "a" And char <= "z" Then
+                        char = Asc("a") + (Asc(char) - Asc("a") + offset) Mod 26
+                        Caesar = Caesar & Chr(char)
+                Else
+                        Caesar = Caesar & char
+                End If
+        Next
+End Function
+
+If flag = Base64Decode(Caesar(bbb, 26-aaa)) Then
+    MsgBox "Congratulations! Correct  FLAG!"
+Else
+    MsgBox "Wrong flag."
+End If
